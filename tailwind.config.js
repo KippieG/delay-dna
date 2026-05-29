@@ -5,25 +5,31 @@ export default {
     extend: {
       colors: {
         navy: {
-          900: '#0a0f1e',
-          800: '#0d1528',
-          700: '#111d35',
-          600: '#162442',
+          950: '#07090f',
+          900: '#0b0d16',
+          800: '#0f1320',
+          700: '#141a2e',
+          600: '#1a2240',
         },
-        dna: {
-          blue: '#3b82f6',
-          teal: '#14b8a6',
-          orange: '#f97316',
-          red: '#ef4444',
-          green: '#22c55e',
-          yellow: '#eab308',
+        ecs: {
+          red:    '#CC0000',
+          redhov: '#a80000',
+          redglow:'#CC000040',
+          yellow: '#F5A800',
+          gold:   '#d4940a',
+          ygroup: '#F5A80040',
+          light:  '#fff5e6',
         },
       },
       fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+      },
+      boxShadow: {
+        'ecs-red':    '0 0 24px 0 rgba(204,0,0,0.25)',
+        'ecs-yellow': '0 0 24px 0 rgba(245,168,0,0.25)',
       },
     },
   },
   plugins: [],
 }
-

@@ -1,176 +1,196 @@
 import { useState } from 'react';
-import { Info } from 'lucide-react';
+import { Info, ChevronRight } from 'lucide-react';
 import { shipments } from '../data/shipments';
-import { getRiskBadge, getRiskColor, formatDelay, getCategoryIcon, getCategoryColor, getScoreBarColor } from '../utils/predictor';
+import {
+  getRiskBadge, getRiskColor, formatDelay,
+  getCategoryIcon, getCategoryColor, getScoreBarColor
+} from '../utils/predictor';
+
+const FILTERS = ['alle', 'critical', 'high', 'medium', 'low'];
+const FILTER_LABELS: Record<string, string> = {
+  alle: 'Alle', critical: 'Kritiek', high: 'Hoog', medium: 'Gemiddeld', low: 'Laag',
+};
 
 export function ShipmentTable() {
   const [expanded, setExpanded] = useState<string | null>(null);
-  const [filter, setFilter] = useState<string>('all');
+  const [filter, setFilter]     = useState('alle');
 
-  const filtered = filter === 'all' ? shipments : shipments.filter(s => s.riskLevel === filter);
-  const sorted = [...filtered].sort((a, b) => b.riskScore - a.riskScore);
+  const filtered = filter === 'alle' ? shipments : shipments.filter(s => s.riskLevel === filter);
+  const sorted   = [...filtered].sort((a, b) => b.riskScore - a.riskScore);
 
   return (
     <div className="glass rounded-2xl overflow-hidden">
-      <div className="px-6 py-4 border-b border-white/5 flex items-center justify-between flex-wrap gap-3">
+      {/* ── Header ── */}
+      <div className="px-6 py-4 border-b border-white/5 flex flex-wrap gap-3 items-center justify-between">
         <div>
-          <h2 className="text-base font-semibold text-white">Live Shipment Risk Monitor</h2>
-          <p className="text-xs text-slate-500 mt-0.5">AI-scored risk per active shipment · Click to inspect delay DNA</p>
+          <h2 className="text-base font-semibold text-white">Live Shipment Risico Monitor</h2>
+          <p className="text-xs text-slate-500 mt-0.5">
+            AI-risicoscore per actieve zending · klik op een rij voor de volledige vertraging-analyse
+          </p>
         </div>
         <div className="flex gap-2 flex-wrap">
-          {['all', 'critical', 'high', 'medium', 'low'].map(level => (
+          {FILTERS.map(f => (
             <button
-              key={level}
-              onClick={() => setFilter(level)}
-              className={`px-3 py-1 rounded-lg text-xs font-medium transition-all capitalize ${
-                filter === level
-                  ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40'
-                  : 'text-slate-400 hover:text-slate-300 border border-white/5 hover:border-white/10'
-              }`}
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`px-3 py-1 rounded-lg text-xs font-medium transition-all
+                ${filter === f
+                  ? 'text-white border'
+                  : 'text-slate-400 border border-white/6 hover:border-white/12 hover:text-slate-300'}`}
+              style={filter === f ? {
+                background: 'rgba(204,0,0,0.15)',
+                borderColor: 'rgba(204,0,0,0.4)',
+                color: '#f87171',
+              } : {}}
             >
-              {level}
+              {FILTER_LABELS[f]}
             </button>
           ))}
         </div>
       </div>
 
+      {/* ── Table ── */}
       <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+        <table className="w-full text-sm min-w-[860px]">
           <thead>
             <tr className="border-b border-white/5">
-              <th className="px-6 py-3 text-left text-xs text-slate-500 font-medium uppercase tracking-wider">Shipment</th>
-              <th className="px-4 py-3 text-left text-xs text-slate-500 font-medium uppercase tracking-wider">Route</th>
-              <th className="px-4 py-3 text-left text-xs text-slate-500 font-medium uppercase tracking-wider">Client</th>
-              <th className="px-4 py-3 text-left text-xs text-slate-500 font-medium uppercase tracking-wider">Status</th>
-              <th className="px-4 py-3 text-left text-xs text-slate-500 font-medium uppercase tracking-wider">Risk Score</th>
-              <th className="px-4 py-3 text-left text-xs text-slate-500 font-medium uppercase tracking-wider">Delay P%</th>
-              <th className="px-4 py-3 text-left text-xs text-slate-500 font-medium uppercase tracking-wider">Predicted</th>
-              <th className="px-4 py-3 text-left text-xs text-slate-500 font-medium uppercase tracking-wider">ETA</th>
-              <th className="px-4 py-3" />
+              {['Zending ID', 'Route', 'Klant', 'Status', 'Risicoscore', 'Kans vertr.', 'Verwachte vertr.', 'ETA', 'Niveau'].map(h => (
+                <th key={h} className="px-5 py-3 text-left text-[11px] font-medium text-slate-500 uppercase tracking-wider whitespace-nowrap">
+                  {h}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
-            {sorted.map(shipment => (
+            {sorted.map(s => (
               <>
+                {/* ── Main row ── */}
                 <tr
-                  key={shipment.id}
-                  className="border-b border-white/3 hover:bg-white/2 cursor-pointer transition-colors"
-                  onClick={() => setExpanded(expanded === shipment.id ? null : shipment.id)}
+                  key={s.id}
+                  onClick={() => setExpanded(expanded === s.id ? null : s.id)}
+                  className="border-b border-white/[0.03] hover:bg-white/[0.025] cursor-pointer transition-colors group"
                 >
-                  <td className="px-6 py-3">
-                    <div>
-                      <p className="font-mono text-xs text-blue-400">{shipment.id}</p>
-                      <p className="text-xs text-slate-500">{shipment.containerType}</p>
+                  <td className="px-5 py-3">
+                    <div className="flex items-center gap-2">
+                      <ChevronRight
+                        size={13}
+                        className={`text-slate-600 transition-transform ${expanded === s.id ? 'rotate-90' : ''}`}
+                      />
+                      <div>
+                        <p className="font-mono text-xs text-[#F5A800]">{s.id}</p>
+                        <p className="text-[11px] text-slate-500">{s.containerType}</p>
+                      </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3">
-                    <span className="text-xs text-slate-300">{shipment.route}</span>
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className="text-xs text-slate-300 whitespace-nowrap">{shipment.client}</span>
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className="text-xs text-slate-400">{shipment.currentStatus}</span>
-                  </td>
-                  <td className="px-4 py-3">
+                  <td className="px-5 py-3 text-xs text-slate-300 whitespace-nowrap">{s.route}</td>
+                  <td className="px-5 py-3 text-xs text-slate-300 whitespace-nowrap">{s.client}</td>
+                  <td className="px-5 py-3 text-xs text-slate-400 whitespace-nowrap max-w-[180px] truncate">{s.currentStatus}</td>
+
+                  {/* Risk score with bar */}
+                  <td className="px-5 py-3">
                     <div className="flex items-center gap-2">
-                      <div className="relative w-16 h-1.5 bg-white/5 rounded-full overflow-hidden">
+                      <div className="w-14 h-1.5 bg-white/5 rounded-full overflow-hidden">
                         <div
-                          className="absolute left-0 top-0 h-full rounded-full transition-all"
-                          style={{ width: `${shipment.riskScore}%`, backgroundColor: getScoreBarColor(shipment.riskScore) }}
+                          className="h-full rounded-full"
+                          style={{ width: `${s.riskScore}%`, background: getScoreBarColor(s.riskScore) }}
                         />
                       </div>
-                      <span className={`text-sm font-bold ${getRiskColor(shipment.riskLevel)}`}>
-                        {shipment.riskScore}
+                      <span className={`text-sm font-bold tabular-nums ${getRiskColor(s.riskLevel)}`}>
+                        {s.riskScore}
                       </span>
                     </div>
                   </td>
-                  <td className="px-4 py-3">
-                    <span className={`text-sm font-medium ${getRiskColor(shipment.riskLevel)}`}>
-                      {shipment.delayProbability}%
+
+                  <td className="px-5 py-3">
+                    <span className={`text-sm font-semibold tabular-nums ${getRiskColor(s.riskLevel)}`}>
+                      {s.delayProbability}%
                     </span>
                   </td>
-                  <td className="px-4 py-3">
-                    <span className={`text-xs font-medium ${shipment.predictedDelay > 0 ? getRiskColor(shipment.riskLevel) : 'text-green-400'}`}>
-                      {formatDelay(shipment.predictedDelay)}
+                  <td className="px-5 py-3">
+                    <span className={`text-xs font-semibold ${s.predictedDelay > 0 ? getRiskColor(s.riskLevel) : 'text-green-400'}`}>
+                      {formatDelay(s.predictedDelay)}
                     </span>
                   </td>
-                  <td className="px-4 py-3">
-                    <span className="text-xs text-slate-400 font-mono">
-                      {shipment.eta.split(' ')[1]}
-                    </span>
+                  <td className="px-5 py-3 font-mono text-xs text-slate-400">
+                    {s.eta.split(' ')[1]}
                   </td>
-                  <td className="px-4 py-3">
-                    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium ${getRiskBadge(shipment.riskLevel)}`}>
-                      {shipment.riskLevel}
+                  <td className="px-5 py-3">
+                    <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${getRiskBadge(s.riskLevel)}`}>
+                      {s.riskLevel}
                     </span>
                   </td>
                 </tr>
 
-                {expanded === shipment.id && (
-                  <tr key={`${shipment.id}-detail`} className="bg-white/2">
-                    <td colSpan={9} className="px-6 py-4">
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* ── Expanded detail ── */}
+                {expanded === s.id && (
+                  <tr key={`${s.id}-exp`}>
+                    <td colSpan={9} className="bg-white/[0.018] border-b border-white/5">
+                      <div className="px-6 py-5 grid grid-cols-1 md:grid-cols-3 gap-5">
+
+                        {/* DNA Breakdown */}
                         <div>
-                          <p className="text-xs font-medium text-slate-400 mb-2 flex items-center gap-1">
-                            <Info size={12} /> Delay DNA Breakdown
+                          <p className="text-xs font-semibold text-slate-400 mb-3 flex items-center gap-1.5">
+                            <Info size={12} className="text-[#F5A800]" />
+                            Vertraging DNA — oorzaak analyse
                           </p>
-                          <div className="space-y-2">
-                            {shipment.delayFactors.map((factor, i) => (
-                              <div key={i} className="flex items-center gap-2">
-                                <span className="text-sm">{getCategoryIcon(factor.category)}</span>
-                                <div className="flex-1">
-                                  <div className="flex justify-between text-xs mb-0.5">
-                                    <span className={`${getCategoryColor(factor.category)}`}>{factor.name}</span>
-                                    <span className="text-slate-400">{factor.impact}%</span>
-                                  </div>
-                                  <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                                    <div
-                                      className="h-full rounded-full transition-all"
-                                      style={{ width: `${factor.impact}%`, backgroundColor: getScoreBarColor(factor.impact) }}
-                                    />
-                                  </div>
+                          <div className="space-y-2.5">
+                            {s.delayFactors.map((f, i) => (
+                              <div key={i}>
+                                <div className="flex justify-between text-xs mb-0.5">
+                                  <span className={`flex items-center gap-1 ${getCategoryColor(f.category)}`}>
+                                    <span>{getCategoryIcon(f.category)}</span> {f.name}
+                                  </span>
+                                  <span className="text-slate-400 font-medium">{f.impact}%</span>
+                                </div>
+                                <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                                  <div
+                                    className="h-full rounded-full"
+                                    style={{ width: `${f.impact}%`, background: getScoreBarColor(f.impact * 1.4) }}
+                                  />
                                 </div>
                               </div>
                             ))}
                           </div>
                         </div>
 
+                        {/* Details */}
                         <div>
-                          <p className="text-xs font-medium text-slate-400 mb-2">Shipment Details</p>
-                          <div className="space-y-1.5 text-xs">
-                            <div className="flex justify-between">
-                              <span className="text-slate-500">Carrier</span>
-                              <span className="text-slate-300">{shipment.carrier}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-slate-500">Container</span>
-                              <span className="text-slate-300">{shipment.containerType}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-slate-500">Weight</span>
-                              <span className="text-slate-300">{shipment.weight.toLocaleString()} kg</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-slate-500">Customs</span>
-                              <span className={shipment.customsRequired ? 'text-orange-400' : 'text-green-400'}>
-                                {shipment.customsRequired ? 'Required' : 'Not required'}
-                              </span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-slate-500">Ferry slot</span>
-                              <span className="text-slate-300">{shipment.ferrySlot}</span>
-                            </div>
-                          </div>
+                          <p className="text-xs font-semibold text-slate-400 mb-3">Zendingsdetails</p>
+                          <dl className="space-y-2">
+                            {[
+                              ['Vervoerder',   s.carrier],
+                              ['Container',    s.containerType],
+                              ['Gewicht',      `${s.weight.toLocaleString('nl-BE')} kg`],
+                              ['Douane',       s.customsRequired ? '⚠️ Vereist' : '✅ Niet vereist'],
+                              ['Ferryslot',    s.ferrySlot],
+                              ['Herkomst',     s.origin],
+                              ['Bestemming',   s.destination],
+                            ].map(([k, v]) => (
+                              <div key={k as string} className="flex justify-between text-xs">
+                                <dt className="text-slate-500">{k}</dt>
+                                <dd className="text-slate-300">{v}</dd>
+                              </div>
+                            ))}
+                          </dl>
                         </div>
 
+                        {/* AI Recommendation */}
                         <div>
-                          <p className="text-xs font-medium text-slate-400 mb-2">AI Recommendation</p>
-                          <div className={`p-3 rounded-lg border text-xs ${shipment.riskLevel === 'critical' || shipment.riskLevel === 'high' ? 'bg-red-500/5 border-red-500/20 text-red-300' : 'bg-blue-500/5 border-blue-500/20 text-blue-300'}`}>
-                            {shipment.riskLevel === 'critical' && '⚡ Immediate action: Contact carrier and notify client. Consider rerouting via alternative ferry slot.'}
-                            {shipment.riskLevel === 'high' && '⚠️ Proactive alert: Notify client of potential delay. Verify customs documentation now to prevent bottleneck.'}
-                            {shipment.riskLevel === 'medium' && '📋 Monitor: Schedule check-in with carrier. Prepare contingency if weather worsens.'}
-                            {shipment.riskLevel === 'low' && '✅ On track: No action needed. Standard monitoring applies.'}
+                          <p className="text-xs font-semibold text-slate-400 mb-3">AI Aanbeveling</p>
+                          <div className={`p-3.5 rounded-xl text-xs leading-relaxed
+                            ${s.riskLevel === 'critical'
+                              ? 'bg-[#CC0000]/8 border border-[#CC0000]/25 text-red-300'
+                              : s.riskLevel === 'high'
+                              ? 'bg-orange-500/8 border border-orange-500/25 text-orange-300'
+                              : 'bg-[#F5A800]/8 border border-[#F5A800]/25 text-yellow-200'}`}>
+                            {s.riskLevel === 'critical' &&
+                              '⚡ Directe actie: neem contact op met vervoerder en informeer de klant. Overweeg omleiding via alternatief ferryslot. Controleer douanedossier onmiddellijk.'}
+                            {s.riskLevel === 'high' &&
+                              '⚠️ Proactief handelen: klant informeren over mogelijke vertraging. Verifieer douanedocumenten nu om bottleneck te voorkomen.'}
+                            {s.riskLevel === 'medium' &&
+                              '📋 Opvolgen: plan check-in met vervoerder. Bereid contingency voor als weersomstandigheden verslechteren.'}
+                            {s.riskLevel === 'low' &&
+                              '✅ Op schema: geen actie vereist. Standaardmonitoring van toepassing.'}
                           </div>
                         </div>
                       </div>
