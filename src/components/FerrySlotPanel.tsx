@@ -27,7 +27,6 @@ export function FerrySlotPanel() {
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              {/* delay risk bar */}
               <div>
                 <div className="flex justify-between text-[11px] mb-1">
                   <span className="text-slate-500">Risico</span>
@@ -38,7 +37,6 @@ export function FerrySlotPanel() {
                        style={{ width: `${slot.delayRate}%`, background: getScoreBarColor(slot.delayRate * 2.2) }} />
                 </div>
               </div>
-              {/* capacity bar */}
               <div>
                 <div className="flex justify-between text-[11px] mb-1">
                   <span className="text-slate-500">Capaciteit</span>
@@ -46,10 +44,8 @@ export function FerrySlotPanel() {
                 </div>
                 <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
                   <div className="h-full rounded-full"
-                       style={{
-                         width: `${(slot.fill / slot.capacity) * 100}%`,
-                         background: `linear-gradient(90deg, #CC0000, #F5A800)`,
-                       }} />
+                       style={{ width: `${(slot.fill / slot.capacity) * 100}%`,
+                                background: 'linear-gradient(90deg, #8D1D45, #F8CE3E)' }} />
                 </div>
               </div>
             </div>

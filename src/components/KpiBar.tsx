@@ -6,19 +6,18 @@ interface CardProps {
   value: string | number;
   sub: string;
   icon: React.ReactNode;
-  accent: string;          // tailwind text color
-  glow: string;            // inline hex for glow blob
+  color: string;   // hex for icon tint + glow
 }
 
-function KpiCard({ label, value, sub, icon, accent, glow }: CardProps) {
+function KpiCard({ label, value, sub, icon, color }: CardProps) {
   return (
     <div className="relative flex-1 min-w-[148px] glass rounded-2xl p-5 overflow-hidden
                     hover:scale-[1.02] transition-transform duration-200 cursor-default">
-      {/* soft glow blob */}
-      <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full opacity-20 blur-2xl pointer-events-none"
-           style={{ background: glow }} />
-      <div className={`mb-3 inline-flex items-center justify-center w-9 h-9 rounded-xl ${accent} bg-current/10`}>
-        <div className={accent}>{icon}</div>
+      <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full opacity-15 blur-2xl pointer-events-none"
+           style={{ background: color }} />
+      <div className="mb-3 inline-flex items-center justify-center w-9 h-9 rounded-xl"
+           style={{ background: `${color}18`, border: `1px solid ${color}30` }}>
+        <div style={{ color }}>{icon}</div>
       </div>
       <p className="text-2xl font-extrabold text-white tabular-nums">{value}</p>
       <p className="text-xs font-medium text-slate-300 mt-0.5">{label}</p>
@@ -30,12 +29,12 @@ function KpiCard({ label, value, sub, icon, accent, glow }: CardProps) {
 export function KpiBar() {
   return (
     <div className="flex gap-3 flex-wrap">
-      <KpiCard label="Actieve Shipments"      value={kpis.totalActiveShipments}     sub="over alle routes"           icon={<Package size={16}/>}     accent="text-[#F5A800]" glow="#F5A800" />
-      <KpiCard label="Kritiek Risico"         value={kpis.criticalRisk}             sub="directe actie vereist"     icon={<ShieldAlert size={16}/>}  accent="text-[#CC0000]" glow="#CC0000" />
-      <KpiCard label="Hoog Risico"            value={kpis.highRisk}                 sub="nauw opvolgen"             icon={<AlertTriangle size={16}/>} accent="text-orange-400" glow="#f97316" />
-      <KpiCard label="Voorspelde Vertragingen" value={kpis.predictedDelaysToday}    sub="AI-forecast komende 24u"   icon={<Clock size={16}/>}        accent="text-yellow-400" glow="#eab308" />
-      <KpiCard label="Op-Tijd Ratio"          value={`${kpis.onTimeRate}%`}         sub="laatste 30 dagen"          icon={<CheckCircle size={16}/>}  accent="text-green-400" glow="#22c55e" />
-      <KpiCard label="Gem. Vertraging"        value={`${kpis.avgDelayScore}d`}      sub="wanneer vertraagd"         icon={<TrendingDown size={16}/>} accent="text-slate-400" glow="#94a3b8" />
+      <KpiCard label="Actieve Shipments"       value={kpis.totalActiveShipments}  sub="over alle routes"          icon={<Package size={16}/>}      color="#F8CE3E" />
+      <KpiCard label="Kritiek Risico"          value={kpis.criticalRisk}          sub="directe actie vereist"    icon={<ShieldAlert size={16}/>}   color="#8D1D45" />
+      <KpiCard label="Hoog Risico"             value={kpis.highRisk}              sub="nauw opvolgen"             icon={<AlertTriangle size={16}/>} color="#c44d2c" />
+      <KpiCard label="Voorspelde Vertragingen" value={kpis.predictedDelaysToday}  sub="AI-forecast komende 24u"  icon={<Clock size={16}/>}         color="#F8CE3E" />
+      <KpiCard label="Op-Tijd Ratio"           value={`${kpis.onTimeRate}%`}      sub="laatste 30 dagen"          icon={<CheckCircle size={16}/>}   color="#22c55e" />
+      <KpiCard label="Gem. Vertraging"         value={`${kpis.avgDelayScore}d`}   sub="wanneer vertraagd"         icon={<TrendingDown size={16}/>}  color="#94a3b8" />
     </div>
   );
 }

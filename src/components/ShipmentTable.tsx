@@ -38,9 +38,9 @@ export function ShipmentTable() {
                   ? 'text-white border'
                   : 'text-slate-400 border border-white/6 hover:border-white/12 hover:text-slate-300'}`}
               style={filter === f ? {
-                background: 'rgba(204,0,0,0.15)',
-                borderColor: 'rgba(204,0,0,0.4)',
-                color: '#f87171',
+                background: 'rgba(141,29,69,0.18)',
+                borderColor: 'rgba(141,29,69,0.45)',
+                color: '#F8CE3E',
               } : {}}
             >
               {FILTER_LABELS[f]}
@@ -77,7 +77,7 @@ export function ShipmentTable() {
                         className={`text-slate-600 transition-transform ${expanded === s.id ? 'rotate-90' : ''}`}
                       />
                       <div>
-                        <p className="font-mono text-xs text-[#F5A800]">{s.id}</p>
+                        <p className="font-mono text-xs text-[#F8CE3E]">{s.id}</p>
                         <p className="text-[11px] text-slate-500">{s.containerType}</p>
                       </div>
                     </div>
@@ -130,7 +130,7 @@ export function ShipmentTable() {
                         {/* DNA Breakdown */}
                         <div>
                           <p className="text-xs font-semibold text-slate-400 mb-3 flex items-center gap-1.5">
-                            <Info size={12} className="text-[#F5A800]" />
+                            <Info size={12} className="text-[#F8CE3E]" />
                             Vertraging DNA — oorzaak analyse
                           </p>
                           <div className="space-y-2.5">
@@ -179,10 +179,10 @@ export function ShipmentTable() {
                           <p className="text-xs font-semibold text-slate-400 mb-3">AI Aanbeveling</p>
                           <div className={`p-3.5 rounded-xl text-xs leading-relaxed
                             ${s.riskLevel === 'critical'
-                              ? 'bg-[#CC0000]/8 border border-[#CC0000]/25 text-red-300'
+                              ? 'bg-[#8D1D45]/10 border border-[#8D1D45]/30 text-red-300'
                               : s.riskLevel === 'high'
                               ? 'bg-orange-500/8 border border-orange-500/25 text-orange-300'
-                              : 'bg-[#F5A800]/8 border border-[#F5A800]/25 text-yellow-200'}`}>
+                              : 'bg-[#F8CE3E]/8 border border-[#F8CE3E]/25 text-yellow-200'}`}>
                             {s.riskLevel === 'critical' &&
                               '⚡ Directe actie: neem contact op met vervoerder en informeer de klant. Overweeg omleiding via alternatief ferryslot. Controleer douanedossier onmiddellijk.'}
                             {s.riskLevel === 'high' &&

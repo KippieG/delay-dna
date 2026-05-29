@@ -46,7 +46,7 @@ export default function App() {
             <a
               href="https://github.com/KippieG/delay-dna"
               target="_blank" rel="noopener noreferrer"
-              className="hover:text-[#F5A800] transition-colors"
+              className="hover:text-[#F8CE3E] transition-colors"
             >
               github.com/KippieG/delay-dna
             </a>

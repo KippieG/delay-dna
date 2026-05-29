@@ -3,6 +3,9 @@ import {
 } from 'recharts';
 import { delayTrend } from '../data/shipments';
 
+const R = '#8D1D45';
+const Y = '#F8CE3E';
+
 const Tip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
@@ -30,11 +33,11 @@ export function TrendChart() {
         </div>
         <div className="flex items-center gap-4 text-xs text-slate-400">
           <span className="flex items-center gap-1.5">
-            <span className="inline-block w-3 h-0.5 rounded" style={{ background: '#CC0000' }} />
+            <span className="inline-block w-3 h-0.5 rounded" style={{ background: R }} />
             Vertraging (d)
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="inline-block w-3 h-0.5 rounded" style={{ background: '#F5A800' }} />
+            <span className="inline-block w-3 h-0.5 rounded" style={{ background: Y }} />
             Op-tijd %
           </span>
         </div>
@@ -43,8 +46,8 @@ export function TrendChart() {
         <ComposedChart data={delayTrend} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
           <defs>
             <linearGradient id="delayGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%"  stopColor="#CC0000" stopOpacity={0.35} />
-              <stop offset="95%" stopColor="#CC0000" stopOpacity={0.0}  />
+              <stop offset="5%"  stopColor={R} stopOpacity={0.4} />
+              <stop offset="95%" stopColor={R} stopOpacity={0.0} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
@@ -53,11 +56,11 @@ export function TrendChart() {
           <Tooltip content={<Tip />} cursor={{ stroke: 'rgba(255,255,255,0.08)' }} />
           <Area
             type="monotone" dataKey="avgDelay" name="Vertraging"
-            stroke="#CC0000" strokeWidth={2} fill="url(#delayGrad)" dot={false}
+            stroke={R} strokeWidth={2.5} fill="url(#delayGrad)" dot={false}
           />
           <Line
             type="monotone" dataKey="onTime" name="Op-tijd"
-            stroke="#F5A800" strokeWidth={2} dot={{ fill: '#F5A800', r: 3 }}
+            stroke={Y} strokeWidth={2.5} dot={{ fill: Y, r: 3, strokeWidth: 0 }}
           />
         </ComposedChart>
       </ResponsiveContainer>

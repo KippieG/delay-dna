@@ -1,32 +1,33 @@
 import { Brain, Database, GitBranch, TrendingUp } from 'lucide-react';
 
+const R = '#8D1D45';
+const Y = '#F8CE3E';
+
 const features = [
-  { icon: '📊', name: 'Historische vertragingspatronen',    weight: 28, desc: 'Per route, carrier en seizoen' },
-  { icon: '🛃', name: 'Douane-complexiteitsscore',          weight: 22, desc: 'Brexit-risico + documentatiestatus' },
-  { icon: '🚢', name: 'Havencongestie-index',               weight: 18, desc: 'Real-time kaaibezetting' },
-  { icon: '🌊', name: 'Weersvoorspellingssignaal',          weight: 14, desc: 'Zeegang + windsnelheid prognose' },
-  { icon: '📦', name: 'Carrier betrouwbaarheidsscore',      weight: 10, desc: 'Trailing 90-daagse prestatie' },
-  { icon: '⛴️', name: 'Ferry slot belastingsgraad',         weight:  8, desc: 'Bezettingsgraad + vertrektijdfactor' },
+  { icon: '📊', name: 'Historische vertragingspatronen',  weight: 28, desc: 'Per route, carrier en seizoen' },
+  { icon: '🛃', name: 'Douane-complexiteitsscore',        weight: 22, desc: 'Brexit-risico + documentatiestatus' },
+  { icon: '🚢', name: 'Havencongestie-index',             weight: 18, desc: 'Real-time kaaibezetting' },
+  { icon: '🌊', name: 'Weersvoorspellingssignaal',        weight: 14, desc: 'Zeegang + windsnelheid prognose' },
+  { icon: '📦', name: 'Carrier betrouwbaarheidsscore',    weight: 10, desc: 'Trailing 90-daagse prestatie' },
+  { icon: '⛴️', name: 'Ferry slot belastingsgraad',       weight:  8, desc: 'Bezettingsgraad + vertrektijdfactor' },
 ];
 
 export function ModelExplainer() {
   return (
     <div className="glass rounded-2xl p-5">
-      {/* Header */}
       <div className="flex items-center gap-3 mb-5">
-        <div className="p-2.5 rounded-xl border"
-             style={{ background: 'rgba(204,0,0,0.1)', borderColor: 'rgba(204,0,0,0.3)' }}>
-          <Brain size={20} style={{ color: '#CC0000' }} />
+        <div className="p-2.5 rounded-xl"
+             style={{ background: `${R}18`, border: `1px solid ${R}35` }}>
+          <Brain size={20} style={{ color: Y }} />
         </div>
         <div>
           <h2 className="text-base font-semibold text-white">Hoe werkt het AI-model?</h2>
           <p className="text-xs text-slate-500 mt-0.5">
-            De gewichten van de 6 factoren die de Delay DNA-score bepalen
+            De 6 factoren die de Delay DNA-score bepalen en hun gewicht
           </p>
         </div>
       </div>
 
-      {/* Feature weight cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-5">
         {features.map((f, i) => (
           <div key={i} className="p-3.5 rounded-xl bg-white/[0.025] border border-white/5 hover:border-white/10 transition-colors">
@@ -38,8 +39,8 @@ export function ModelExplainer() {
                   <p className="text-[11px] text-slate-600">{f.desc}</p>
                 </div>
               </div>
-              <span className="text-sm font-extrabold ml-2 shrink-0"
-                    style={{ color: '#F5A800' }}>
+              <span className="text-sm font-extrabold ml-2 shrink-0 tabular-nums"
+                    style={{ color: Y }}>
                 {f.weight}%
               </span>
             </div>
@@ -47,20 +48,19 @@ export function ModelExplainer() {
               <div className="h-full rounded-full"
                    style={{
                      width: `${(f.weight / 28) * 100}%`,
-                     background: 'linear-gradient(90deg, #CC0000, #F5A800)',
+                     background: `linear-gradient(90deg, ${R}, ${Y})`,
                    }} />
             </div>
           </div>
         ))}
       </div>
 
-      {/* Stats bar */}
       <div className="border-t border-white/5 pt-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { icon: <Database size={15} />, val: '4,2M+',  label: 'Trainingsrecords', color: '#F5A800' },
-          { icon: <GitBranch size={15}/>, val: 'XGBoost', label: 'Algoritme',        color: '#CC0000' },
-          { icon: <TrendingUp size={15}/>,val: '84,2%',  label: 'Voorspel-accuraatheid', color: '#F5A800' },
-          { icon: <Brain size={15}/>,     val: 'Real-time',label:'Score refresh',    color: '#CC0000' },
+          { icon: <Database size={15}/>,  val: '4,2M+',    label: 'Trainingsrecords',       color: Y },
+          { icon: <GitBranch size={15}/>, val: 'XGBoost',  label: 'Algoritme',              color: R },
+          { icon: <TrendingUp size={15}/>,val: '84,2%',    label: 'Voorspel­accuraatheid',  color: Y },
+          { icon: <Brain size={15}/>,     val: 'Real-time',label: 'Score refresh',          color: R },
         ].map((s, i) => (
           <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.025]">
             <div className="shrink-0" style={{ color: s.color }}>{s.icon}</div>

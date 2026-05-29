@@ -27,12 +27,12 @@ export function getRiskLabel(level: RiskLevel): string {
   }
 }
 
-/* Score bar fill color — ECS palette: red → yellow → green */
+/* Score bar: ECS burgundy → orange → ECS yellow → green */
 export function getScoreBarColor(score: number): string {
-  if (score >= 80) return '#CC0000';   // ECS red
-  if (score >= 60) return '#e05c00';   // orange-red
-  if (score >= 40) return '#F5A800';   // ECS yellow
-  return '#22c55e';                     // green
+  if (score >= 80) return '#8D1D45';
+  if (score >= 60) return '#c44d2c';
+  if (score >= 40) return '#F8CE3E';
+  return '#22c55e';
 }
 
 export function formatDelay(days: number): string {
@@ -58,7 +58,7 @@ export function getCategoryColor(category: string): string {
     case 'weather':        return 'text-blue-400';
     case 'customs':        return 'text-purple-400';
     case 'capacity':       return 'text-orange-400';
-    case 'supplier':       return 'text-yellow-400';
+    case 'supplier':       return 'text-yellow-300';
     case 'ferry':          return 'text-teal-400';
     case 'infrastructure': return 'text-red-400';
     default:               return 'text-slate-400';

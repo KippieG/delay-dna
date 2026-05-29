@@ -1,8 +1,8 @@
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
 const factors = [
-  { name: 'Douane & Brexit',      value: 34, color: '#CC0000' },
-  { name: 'Havencapaciteit',      value: 26, color: '#F5A800' },
+  { name: 'Douane & Brexit',      value: 34, color: '#8D1D45' },
+  { name: 'Havencapaciteit',      value: 26, color: '#F8CE3E' },
   { name: 'Weer / zeeomstandig.', value: 18, color: '#3b82f6' },
   { name: 'Leveranciersfout',     value: 12, color: '#a855f7' },
   { name: 'Ferry capaciteit',     value:  7, color: '#14b8a6' },
@@ -34,7 +34,7 @@ export function DelayFactorDonut() {
             innerRadius={58} outerRadius={84}
             paddingAngle={2} dataKey="value" strokeWidth={0}
           >
-            {factors.map((f, i) => <Cell key={i} fill={f.color} fillOpacity={0.88} />)}
+            {factors.map((f, i) => <Cell key={i} fill={f.color} fillOpacity={0.9} />)}
           </Pie>
           <Tooltip content={<Tip />} />
         </PieChart>
